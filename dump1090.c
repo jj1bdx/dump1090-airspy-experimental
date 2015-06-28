@@ -473,10 +473,11 @@ void rtlsdrCallback(unsigned char *buf, uint32_t len, void *ctx) {
 }
 
 int hackrfCallback (hackrf_transfer *transfer) {
+    uint32_t i;
     pthread_mutex_lock(&Modes.data_mutex);
     uint32_t len = transfer-> buffer_length;
     /* HackRF One returns signed IQ values, convert them to unsigned */
-    for (uint32_t i = 0; i < len; i++) {
+    for (i = 0; i < len; i++) {
         transfer->buffer[i] ^= (uint8_t)0x80;
     }
     if (len > MODES_DATA_LEN) len = MODES_DATA_LEN;
