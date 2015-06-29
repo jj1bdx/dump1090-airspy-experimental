@@ -59,8 +59,8 @@
 #define MODES_MAX_GAIN             999999       /* Use max available gain. */
 /* HackRF One Defaults */
 #define MODES_ENABLE_AMP 	   0
-#define MODES_LNA_GAIN 	           40
-#define MODES_VGA_GAIN 	           62
+#define MODES_LNA_GAIN 	           32
+#define MODES_VGA_GAIN 	           48
 
 
 #define MODES_PREAMBLE_US 8       /* microseconds */
