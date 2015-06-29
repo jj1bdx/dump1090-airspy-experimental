@@ -76,11 +76,11 @@ select the highest gain supported automatically.
 
 Example with hackrf_transfer:
 
-    hackrf_transfer -r output.sb -f 1090000000 -s 2000000 -p 0 -a 0 -l 40 -g 62
+    hackrf_transfer -r output.sb -f 1090000000 -s 2000000 -p 0 -a 0 -l 32 -g 48
     sox -r 2000000 -c 1 output.sb output.ub
 
-In the example RX/TX RF amplifier is disabled, IF gain is set to 40dB and baseband
-gain is set to 62dB (maximum values). As opposed to RTL SDR devices, HackRF returns
+In the example RX/TX RF amplifier is disabled, IF gain is set to 32dB and baseband
+gain is set to 48dB (80% of maximum). As opposed to RTL SDR devices, HackRF returns
 signed IQ values, so [SoX](http://sox.sourceforge.net/) is used to convert them to 
 unsigned IQ values. 
 
