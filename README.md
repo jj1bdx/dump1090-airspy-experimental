@@ -1,7 +1,7 @@
 Dump1090 README
 ===
 
-Dump 1090 is a Mode S decoder specifically designed for RTLSDR and HackRF One devices.
+Dump 1090 is a Mode S decoder specifically designed for SDR devices including RTLSDR, HackRF and Airspy.
 
 The main features are:
 
