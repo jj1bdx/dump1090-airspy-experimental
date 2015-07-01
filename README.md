@@ -23,7 +23,8 @@ The main features are:
   (using --net).
 
 This is a fork of Salvatore Sanfilippo's [original dump1090](https://github.com/antirez/dump1090)
-with additional HackRF support.
+with additional [HackRF](https://github.com/mossmann/hackrf) and
+[AirSpy](https://github.com/airspy/) support.
 
 Installation
 ---
@@ -292,4 +293,5 @@ Credits
 
 Dump1090 was written by Salvatore Sanfilippo <antirez@gmail.com> and is
 released under the BSD three clause license. HackRF One support is added by
-Ilker Temir <ilker@ilkertemir.com>.
+Ilker Temir <ilker@ilkertemir.com>. AirSpy support is added by
+Chris Kuethe <chris.kuethe+github@gmail.com>
