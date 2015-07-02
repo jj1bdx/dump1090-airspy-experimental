@@ -448,10 +448,10 @@ int modesInitAirSpy(void) {
 	err(1, NULL);
 
     ios = soxr_io_spec(SOXR_INT16_I, SOXR_INT16_I);
-    qts = soxr_quality_spec(SOXR_LQ, 0);
+    qts = soxr_quality_spec(SOXR_MQ, 0);
     rts = soxr_runtime_spec(2);
 
-    Modes.resampler = soxr_create(2500, 2000, 2, &sox_err, &ios, &qts, &rts);
+    Modes.resampler = soxr_create(10, 2, 2, &sox_err, &ios, &qts, &rts);
     if (sox_err) {
         int e = errno;
         fprintf(stderr, "soxr_create: %s; %s\n", soxr_strerror(sox_err), strerror(errno));
@@ -476,7 +476,7 @@ int modesInitAirSpy(void) {
     status = airspy_set_sample_type(Modes.airspy, AIRSPY_SAMPLE_INT16_IQ);
     AIRSPY_STATUS(status, "airspy_set_sample_type failed.");
 
-    status = airspy_set_samplerate(Modes.airspy, AIRSPY_SAMPLERATE_2_5MSPS);
+    status = airspy_set_samplerate(Modes.airspy, AIRSPY_SAMPLERATE_10MSPS);
     AIRSPY_STATUS(status, "airspy_set_samplerate failed.");
 
     status = airspy_set_mixer_gain(Modes.airspy, Modes.rf_gain != 0);
