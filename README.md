@@ -1,7 +1,7 @@
 Dump1090 README
 ===
 
-<img src='https://raw.githubusercontent.com/itemir/dump1090_sdrplus/images/dump1090_sdrplus.png' align='left' hspace='10'>
+<img src='https://raw.githubusercontent.com/itemir/dump1090_sdrplus/master/images/dump1090_sdrplus.png' align='left' hspace='10'>
 Dump 1090 is a Mode S decoder specifically designed for SDR devices including RTLSDR, HackRF and Airspy.
 
 The main features are:
