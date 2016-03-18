@@ -1,5 +1,5 @@
 CFLAGS?=-O2 -g -Wall -W $(shell pkg-config --cflags librtlsdr libhackrf libairspy soxr)
-LDLIBS+=$(shell pkg-config --libs librtlsdr libhackrf libairspy soxr) -lpthread -lm
+LDLIBS+=$(shell pkg-config --libs librtlsdr libhackrf libairspy soxr) -lpthread -lm -lmirsdrapi-rsp
 CC?=gcc
 PROGNAME=dump1090
 
