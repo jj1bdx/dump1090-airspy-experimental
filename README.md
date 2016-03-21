@@ -292,8 +292,8 @@ the source distribution.
 Credits
 ---
 
-Dump1090 was written by Salvatore Sanfilippo <antirez@gmail.com> and is
-released under the BSD three clause license. HackRF One support is added by
-Ilker Temir <ilker@ilkertemir.com>. AirSpy support is added by
-Chris Kuethe <chris.kuethe+github@gmail.com>. SDRplay support is added by
+Dump1090 was written by [Salvatore Sanfilippo](https://github.com/antirez) and
+is released under the BSD three clause license. HackRF One support is added by
+[Ilker Temir](https://github.com/itemir). AirSpy support is added by
+[Chris Kuethe](https://github.com/ckuethe). SDRplay support is added by
 the [SDRplay](https://github.com/SDRplay) team.
