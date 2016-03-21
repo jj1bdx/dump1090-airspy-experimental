@@ -2,7 +2,7 @@ Dump1090_sdrplus README
 ===
 
 <img src='https://raw.githubusercontent.com/itemir/dump1090_sdrplus/master/images/dump1090_sdrplus.png' align='left' width='300' hspace='25' vspace='10'>
-Dump 1090 is a Mode S decoder specifically designed for SDR devices including RTLSDR, HackRF, Airspy and SDRplay.
+Dump1090_sdrplus is a Mode S decoder specifically designed for SDR devices including [RTLSDR](http://www.rtl-sdr.com/), [HackRF One](https://greatscottgadgets.com/hackrf/), [Airspy](http://airspy.com/) and [SDRplay](http://www.sdrplay.com/). It is a fork of original [dump1090](https://github.com/antirez/dump1090) with support for additional SDR devices.
 
 The main features are:
 
@@ -293,7 +293,7 @@ Credits
 ---
 
 Dump1090 was written by [Salvatore Sanfilippo](https://github.com/antirez) and
-is released under the BSD three clause license. HackRF One support is added by
-[Ilker Temir](https://github.com/itemir). AirSpy support is added by
-[Chris Kuethe](https://github.com/ckuethe). SDRplay support is added by
+is released under the BSD three clause license. HackRF One support was added by
+[Ilker Temir](https://github.com/itemir). AirSpy support was added by
+[Chris Kuethe](https://github.com/ckuethe). SDRplay support was added by
 the [SDRplay](https://github.com/SDRplay) team.
