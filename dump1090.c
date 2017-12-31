@@ -3037,8 +3037,7 @@ int main(int argc, char **argv) {
             pthread_cond_wait(&Modes.data_cond,&Modes.data_mutex);
             continue;
         }
-//printf("process\n");
-//        computeMagnitudeVector();
+        computeMagnitudeVector();
 
         /* Signal to the other thread that we processed the available data
          * and we want more (useful for --ifile). */
