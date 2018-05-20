@@ -1,4 +1,5 @@
 *.o
+aircraft_log.csv
 dump1090
 testfiles/*.bin
 misc
