@@ -133,6 +133,7 @@ struct aircraft {
     int odd_cprlon;
     int even_cprlat;
     int even_cprlon;
+    int csv_logged;     /* Value is 1 if already logged. */
     double lat, lon;    /* Coordinated obtained from CPR encoded data. */
     long long odd_cprtime, even_cprtime;
     struct aircraft *next; /* Next aircraft in our linked list. */
@@ -208,6 +209,7 @@ struct {
     int interactive;                /* Interactive mode */
     int interactive_rows;           /* Interactive mode: max number of rows. */
     int interactive_ttl;            /* Interactive mode: TTL before deletion. */
+    int csv_log;                    /* Log aircraft detection to CSV file. */
     int stats;                      /* Print stats at exit in --ifile mode. */
     int onlyaddr;                   /* Print only ICAO addresses. */
     int metric;                     /* Use metric units. */
@@ -319,6 +321,7 @@ void modesInitConfig(void) {
     Modes.interactive = 0;
     Modes.interactive_rows = MODES_INTERACTIVE_ROWS;
     Modes.interactive_ttl = MODES_INTERACTIVE_TTL;
+    Modes.csv_log = 0;
     Modes.aggressive = 0;
     Modes.interactive_rows = getTermRows();
 }
@@ -2141,6 +2144,7 @@ struct aircraft *interactiveReceiveData(struct modesMessage *mm) {
 
     a->seen = time(NULL);
     a->messages++;
+    a->csv_logged = 0;
 
     if (mm->msgtype == 0 || mm->msgtype == 4 || mm->msgtype == 20) {
         a->altitude = mm->altitude;
@@ -2206,6 +2210,44 @@ void interactiveShowData(void) {
         a = a->next;
         count++;
     }
+}
+
+/* Write aircraft detection logs as CSV file. */
+void writeCSVLog(void) {
+    struct aircraft *a = Modes.aircrafts;
+    FILE *log_file;
+
+    if (NULL == (log_file = fopen("aircraft_log.csv", "a+"))) {
+        printf("Error opening aircraft_log.csv");
+        return;
+    }
+
+    fseek(log_file, 0, SEEK_END);
+
+    if (ftell(log_file) == 0) {
+        fprintf(log_file, "Hex,Flight,Altitude,Speed,Lat,Lon,Track,Messages,Seen\n");
+    }
+
+    while(a) {
+        int altitude = a->altitude, speed = a->speed;
+
+        /* Convert units to metric if --metric was specified. */
+        if (Modes.metric) {
+            altitude /= 3.2828;
+            speed *= 1.852;
+        }
+
+        if (a->csv_logged == 0) {
+            fprintf(log_file, "%s,%s,%d,%d,%f,%f,%d,%ld,%ld\n",
+                a->hexaddr, a->flight, altitude, speed,
+                a->lat, a->lon, a->track, a->messages,
+                a->seen);
+            a->csv_logged = 1;
+        }
+        a = a->next;
+    }
+
+    fclose(log_file);
 }
 
 /* When in interactive mode If we don't receive new nessages within
@@ -2816,6 +2858,7 @@ void showHelp(void) {
 "                         AirSpy 0-14, step 1, default: 11\n"
 "--freq <hz>              Set frequency (default: 1090 Mhz).\n"
 "--ifile <filename>       Read data from file (use '-' for stdin).\n"
+"--csv-log                Log data to aircraft_log.csv for later analysis.\n"
 "--interactive            Interactive mode refreshing data on screen.\n"
 "--interactive-rows <num> Max number of rows in interactive mode (default: 15).\n"
 "--interactive-ttl <sec>  Remove from list if idle for <sec> (default: 60).\n"
@@ -2854,6 +2897,11 @@ void backgroundTasks(void) {
         modesAcceptClients();
         modesReadFromClients();
         interactiveRemoveStaleAircrafts();
+    }
+
+    /* Log to CSV if CSV logging is activated. */
+    if (Modes.csv_log == 1) {
+        writeCSVLog();
     }
 
     /* Refresh screen when in interactive mode. */
@@ -2943,6 +2991,8 @@ int main(int argc, char **argv) {
             Modes.metric = 1;
         } else if (!strcmp(argv[j],"--aggressive")) {
             Modes.aggressive++;
+        } else if (!strcmp(argv[j],"--csv-log")) {
+            Modes.csv_log = 1;
         } else if (!strcmp(argv[j],"--interactive")) {
             Modes.interactive = 1;
         } else if (!strcmp(argv[j],"--interactive-rows")) {
