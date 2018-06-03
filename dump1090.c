@@ -2219,7 +2219,7 @@ void writeCSVLog(void) {
 
     if (NULL == (log_file = fopen("aircraft_log.csv", "a+"))) {
         printf("Error opening aircraft_log.csv");
-        return NULL;
+        return;
     }
 
     fseek(log_file, 0, SEEK_END);
@@ -2238,7 +2238,7 @@ void writeCSVLog(void) {
         }
 
         if (a->csv_logged == 0) {
-            fprintf(log_file, "%s,%s,%d,%d,%f,%f,%d,%ld,%d\n",
+            fprintf(log_file, "%s,%s,%d,%d,%f,%f,%d,%ld,%ld\n",
                 a->hexaddr, a->flight, altitude, speed,
                 a->lat, a->lon, a->track, a->messages,
                 a->seen);
@@ -2858,6 +2858,7 @@ void showHelp(void) {
 "                         AirSpy 0-14, step 1, default: 11\n"
 "--freq <hz>              Set frequency (default: 1090 Mhz).\n"
 "--ifile <filename>       Read data from file (use '-' for stdin).\n"
+"--csv-log                Log data to aircraft_log.csv for later analysis.\n"
 "--interactive            Interactive mode refreshing data on screen.\n"
 "--interactive-rows <num> Max number of rows in interactive mode (default: 15).\n"
 "--interactive-ttl <sec>  Remove from list if idle for <sec> (default: 60).\n"
