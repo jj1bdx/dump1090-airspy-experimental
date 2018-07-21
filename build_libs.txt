@@ -22,3 +22,6 @@ cd soxr
 ./go
 cd Release
 sudo make install
+
+wget https://www.sdrplay.com/software/SDRplay_RSP_API-RPi-2.13.1.run
+sh ./SDRplay_RSP_API-RPi-2.13.1.run
