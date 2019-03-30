@@ -30,7 +30,17 @@ and [SDRplay](http://www.sdrplay.com/) support.
 Installation
 ---
 
-Type "make".
+Type in the shell
+    
+    sudo apt-get install librtlsdr0 librtlsdr-dev libhackrf-dev libairspy-dev libsoxr-dev
+
+Next, download SDRPlay libraries from: http://www.sdrplay.com/linuxdl.php
+
+    chmod 755 SDRplay_RSP_API-Linux-2.13.1.run
+    ./SDRplay_RSP_API-Linux-2.13.1.run
+    sudo ldconfig
+
+Finally, Type "make".
 
 Normal usage
 ---
