@@ -179,6 +179,7 @@ struct {
     struct airspy_device *airspy;
     soxr_t resampler;
     char *airspy_bytes, *airspy_scratch;
+    int support_10MSPS;
 
     /* SDRplay */
     int sdrplay_enabled;
@@ -324,6 +325,7 @@ void modesInitConfig(void) {
     Modes.csv_log = 0;
     Modes.aggressive = 0;
     Modes.interactive_rows = getTermRows();
+    Modes.support_10MSPS = 0;
 }
 
 void modesInit(void) {
@@ -463,19 +465,42 @@ int modesInitAirSpy(void) {
     qts = soxr_quality_spec(SOXR_MQ, 0);
     rts = soxr_runtime_spec(2);
 
-    Modes.resampler = soxr_create(10, 2, 2, &sox_err, &ios, &qts, &rts);
-    if (sox_err) {
-        int e = errno;
-        fprintf(stderr, "soxr_create: %s; %s\n", soxr_strerror(sox_err), strerror(errno));
-        return e;
-    }
-
     status = airspy_init();
     AIRSPY_STATUS(status, "airspy_init failed.");
 
     status = airspy_open(&Modes.airspy);
     AIRSPY_STATUS(status, "No AirSpy compatible devices found.");
 
+    // The initial airspy mini doesnot support 10MSPS, 
+    // its supported samplerate is 6Msps, 3Msps
+    uint32_t count=0;
+    airspy_get_samplerates(Modes.airspy, &count, 0);
+    uint32_t supported_samplerates[10]={0}; //10 is enough
+    airspy_get_samplerates(Modes.airspy, supported_samplerates, count);
+    for(uint32_t i=0;i<count;i++) {
+      if(supported_samplerates[i] == 10e6)
+      {
+          Modes.support_10MSPS = 1;
+      }
+    }
+    
+    if(Modes.support_10MSPS)
+    {
+        fprintf(stderr,"Airspy: sampling rate is 10MSPS\n");
+        Modes.resampler = soxr_create(10, 2, 2, &sox_err, &ios, &qts, &rts);
+    }
+    else  /*6MSPS is used for airspy mini*/
+    {
+        fprintf(stderr,"Airspy mini: sampling rate is 6MSPS\n");
+        Modes.resampler = soxr_create(6, 2, 2, &sox_err, &ios, &qts, &rts);
+    }
+    if (sox_err) {
+        int e = errno;
+        fprintf(stderr, "soxr_create: %s; %s\n", soxr_strerror(sox_err), strerror(errno));
+        return e;
+    }
+
+    
     if ((Modes.rf_gain + Modes.lna_gain + Modes.vga_gain) == 0) {
 	Modes.rf_gain = AIRSPY_RF_GAIN;
 	Modes.lna_gain = AIRSPY_LNA_GAIN;
@@ -488,7 +513,14 @@ int modesInitAirSpy(void) {
     status = airspy_set_sample_type(Modes.airspy, AIRSPY_SAMPLE_INT16_IQ);
     AIRSPY_STATUS(status, "airspy_set_sample_type failed.");
 
-    status = airspy_set_samplerate(Modes.airspy, AIRSPY_SAMPLERATE_10MSPS);
+    if(Modes.support_10MSPS)
+    {
+        status = airspy_set_samplerate(Modes.airspy, AIRSPY_SAMPLERATE_10MSPS);
+    }
+    else
+    {
+        status = airspy_set_samplerate(Modes.airspy, 6e6);
+    }
     AIRSPY_STATUS(status, "airspy_set_samplerate failed.");
 
     status = airspy_set_mixer_gain(Modes.airspy, Modes.rf_gain != 0);
@@ -667,7 +699,15 @@ int airspyCallback (airspy_transfer *transfer) {
     size_t i, i_done, o_done, i_len, len;
 
     i_len = transfer->sample_count;
-    len = 4 * i_len / 5; // downsample from 2.5Msps to 2Msps
+    if(Modes.support_10MSPS)
+    {
+        len = 4 * i_len / 5; // downsample from 2.5Msps to 2Msps
+    }
+    else
+    {
+        len = 2 * i_len / 3; // downsample from 3Msps to 2Msps
+    }
+    
     soxr_process(Modes.resampler, inptr, i_len, &i_done, outptr, len, &o_done);
     for(i = 0; i < o_done; i++)
         Modes.airspy_bytes[i] = (int8_t)(outptr[i]>>4)+127;
@@ -3124,5 +3164,4 @@ int main(int argc, char **argv) {
     rtlsdr_close(Modes.dev);
     return 0;
 }
-
 
