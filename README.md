@@ -1,8 +1,9 @@
-Dump1090_sdrplus README
+Dump1090 README
 ===
 
-<img src='https://raw.githubusercontent.com/itemir/dump1090_sdrplus/master/images/dump1090_sdrplus.png' align='left' width='300' hspace='25' vspace='10'>
-Dump1090_sdrplus is a Mode S decoder specifically designed for SDR devices including [RTLSDR](http://www.rtl-sdr.com/), [HackRF One](https://greatscottgadgets.com/hackrf/), [Airspy](http://airspy.com/) and [SDRplay](http://www.sdrplay.com/). It is a fork of original [dump1090](https://github.com/antirez/dump1090) with support for additional SDR devices.
+Dump1090 is a Mode S decoder specifically designed for SDR devices including [RTLSDR](http://www.rtl-sdr.com/) and [Airspy](http://airspy.com/).
+
+It is a fork of original [dump1090](https://github.com/antirez/dump1090) with support for additional SDR devices, based on [@itemir's fork dump1090\_sdrplus](https://github.com/itemir/dump1090_sdrplus).
 
 The main features are:
 
@@ -23,22 +24,12 @@ The main features are:
 * TCP server streaming and receiving raw data to/from connected clients
   (using --net).
 
-This is a fork of Salvatore Sanfilippo's [original dump1090](https://github.com/antirez/dump1090)
-with additional [HackRF](https://github.com/mossmann/hackrf), [AirSpy](https://github.com/airspy/) 
-and [SDRplay](http://www.sdrplay.com/) support.
-
 Installation
 ---
 
 Type in the shell
     
-    sudo apt-get install librtlsdr0 librtlsdr-dev libhackrf-dev libairspy-dev libsoxr-dev
-
-Next, download SDRPlay libraries from: http://www.sdrplay.com/linuxdl.php
-
-    chmod 755 SDRplay_RSP_API-Linux-2.13.1.run
-    ./SDRplay_RSP_API-Linux-2.13.1.run
-    sudo ldconfig
+    sudo apt-get install librtlsdr0 librtlsdr-dev libairspy-dev libsoxr-dev
 
 Finally, Type "make".
 
@@ -303,7 +294,10 @@ Credits
 ---
 
 Dump1090 was written by [Salvatore Sanfilippo](https://github.com/antirez) and
-is released under the BSD three clause license. HackRF One support was added by
-[Ilker Temir](https://github.com/itemir). AirSpy support was added by
-[Chris Kuethe](https://github.com/ckuethe). SDRplay support was added by
-the [SDRplay](https://github.com/SDRplay) team.
+is released under the BSD three clause license.
+
+HackRF One support was added by [Ilker Temir](https://github.com/itemir).
+
+AirSpy support was added by [Chris Kuethe](https://github.com/ckuethe).
+
+SDRplay support was added by the [SDRplay](https://github.com/SDRplay) team.
