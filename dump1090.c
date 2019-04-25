@@ -469,12 +469,12 @@ int modesInitAirSpy(void) {
     if(Modes.support_10MSPS)
     {
         fprintf(stderr,"Airspy: sampling rate is 10MSPS\n");
-        Modes.resampler = soxr_create(10, 2, 2, &sox_err, &ios, &qts, &rts);
+        Modes.resampler = soxr_create(10e6, 2e6, 2, &sox_err, &ios, &qts, &rts);
     }
     else  /*6MSPS is used for airspy mini*/
     {
         fprintf(stderr,"Airspy mini: sampling rate is 6MSPS\n");
-        Modes.resampler = soxr_create(6, 2, 2, &sox_err, &ios, &qts, &rts);
+        Modes.resampler = soxr_create(6e6, 2e6, 2, &sox_err, &ios, &qts, &rts);
     }
     if (sox_err) {
         int e = errno;
