@@ -63,9 +63,9 @@
 
 /* AirSpy defaults */
 /* linearity gain 21dB */
-#define AIRSPY_RF_GAIN		   14
-#define AIRSPY_LNA_GAIN		   12 
-#define AIRSPY_VGA_GAIN		   11
+#define AIRSPY_RF_GAIN		   12  /* actually mixer_gain */
+#define AIRSPY_LNA_GAIN		   14 
+#define AIRSPY_VGA_GAIN		   13
 
 #define MODES_PREAMBLE_US 8       /* microseconds */
 #define MODES_LONG_MSG_BITS 112
@@ -1983,7 +1983,7 @@ struct aircraft *interactiveReceiveData(struct modesMessage *mm) {
             }
             /* If the two data is less than 10 seconds apart, compute
              * the position. */
-            if (abs(a->even_cprtime - a->odd_cprtime) <= 10000) {
+            if (llabs(a->even_cprtime - a->odd_cprtime) <= 10000) {
                 decodeCPR(a);
             }
         } else if (mm->metype == 19) {
@@ -2663,15 +2663,11 @@ void showHelp(void) {
 "--dev-airspy             use AirSpy device.\n"
 "--gain <db>              Set RTLSDR gain (default: max gain. Use -100 for auto-gain).\n"
 "--enable-agc             Enable RTLSDR Automatic Gain Control (default: off).\n"
-"--enable-amp             Enable HackRF RX/TX RF amplifier (default: off).\n"
 "--rf-gain                Set RX AMP (RF) gain\n"
-"                         HackRF 0 or 14, default 0\n"
 "                         AirSpy 0-14, step 1, default 11\n"
 "--lna-gain               Set RX LNA (IF) gain\n"
-"                         HackRF 0-40, step 8, default: 40\n"
 "                         AirSpy 0-14, step 1, default: 11\n"
 "--vga-gain               Set RX VGA (baseband) gain\n"
-"                         HackRF 0-62, step 2, default: 62\n"
 "                         AirSpy 0-14, step 1, default: 11\n"
 "--freq <hz>              Set frequency (default: 1090 Mhz).\n"
 "--ifile <filename>       Read data from file (use '-' for stdin).\n"
@@ -2763,8 +2759,6 @@ int main(int argc, char **argv) {
             Modes.gain = atof(argv[++j])*10; /* Gain is in tens of DBs */
         } else if (!strcmp(argv[j],"--enable-agc")) {
             Modes.enable_agc++;
-        } else if (!strcmp(argv[j],"--enable-amp")) {
-            Modes.rf_gain = 14;
         } else if (!strcmp(argv[j],"--rf-gain")) {
             Modes.rf_gain =  atoi(argv[++j]);
         } else if (!strcmp(argv[j],"--lna-gain")) {
