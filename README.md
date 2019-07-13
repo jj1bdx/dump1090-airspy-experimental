@@ -1,3 +1,5 @@
+Note: this repository is no longer maintained. Use [adsbdec](https://github.com/TLeconte/adsbdec) for a usable Airspy ADS-B decoder. 
+
 Dump1090 README
 ===
 
